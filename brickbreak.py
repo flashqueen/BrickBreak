@@ -17,7 +17,8 @@ jogador = pygame.Rect(0, 750, tamanho_jogador, 15)
 qtde_blocos_linha = 8
 qtde_linhas_blocos = 5
 qtde_total_blocos = qtde_blocos_linha * qtde_linhas_blocos
-qtde_coracao_total = 3
+
+global qtde_coracao_total
 
 def criar_blocos(qtde_blocos_linha, qtde_linhas_blocos):
     altura_tela = tamanho_tela[1]
@@ -96,6 +97,7 @@ def movimentar_jogador(evento):
     
 
 def movimentar_bola(bola):
+    global qtde_coracao_total
     movimento = movimento_bola
     
     bola.x = bola.x + movimento[0]
@@ -109,7 +111,7 @@ def movimentar_bola(bola):
         movimento[0] = - movimento[0]
     if bola.y + tamanho_bola >= tamanho_tela[1]:
        movimento[1] = - movimento[1]
-       reduzir_vida()
+       qtde_coracao_total = reduzir_vida(qtde_coracao_total)
        if qtde_coracao_total == 0:
            movimento = None
 
@@ -123,13 +125,8 @@ def movimentar_bola(bola):
     return movimento
 
 def reduzir_vida(coracao):
-    vidas = coracao
-
     if bola.y + tamanho_bola >= tamanho_tela[1]:
-       vidas - 1
-       if vidas == 0:
-           movimento = None
-       return vidas
+       return coracao - 1
 
 def atualizar_pontuacao(pontuacao):
     fonte = pygame.font.Font(None, 30)
@@ -147,6 +144,7 @@ def atualizar_vidas(coracao):
 
 blocos = criar_blocos(qtde_blocos_linha, qtde_linhas_blocos)
 
+qtde_coracao_total = 3
 coracoes = criar_coracao(qtde_coracao_total)
 
 #loop infinito
