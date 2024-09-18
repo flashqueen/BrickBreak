@@ -80,9 +80,9 @@ def desenhar_blocos(blocos):
     for bloco in blocos:
         pygame.draw.rect(tela, cores["roxo"], bloco)
 
-def desenhar_coracoes(coracoes):
-    for coracao in coracoes:
-        pygame.draw.circle(tela, cores["cereja"], (2,2), 4)
+# def desenhar_coracoes(coracoes):
+#     for coracao in coracoes:
+#         pygame.draw.circle(tela, cores["cereja"], (720,720), 4)
 
 #funções do jogo
 def movimentar_jogador(evento):
@@ -97,6 +97,7 @@ def movimentar_jogador(evento):
 
 def movimentar_bola(bola):
     movimento = movimento_bola
+    
     bola.x = bola.x + movimento[0]
     bola.y = bola.y + movimento[1]
 
@@ -107,7 +108,10 @@ def movimentar_bola(bola):
     if bola.x + tamanho_bola >= tamanho_tela[0]:
         movimento[0] = - movimento[0]
     if bola.y + tamanho_bola >= tamanho_tela[1]:
-       movimento = None
+       movimento[1] = - movimento[1]
+       reduzir_vida()
+       if qtde_coracao_total == 0:
+           movimento = None
 
     if jogador.collidepoint(bola.x, bola.y):
         movimento[1] = - movimento[1]
@@ -117,6 +121,15 @@ def movimentar_bola(bola):
             movimento[1] = - movimento[1]
 
     return movimento
+
+def reduzir_vida(coracao):
+    vidas = coracao
+
+    if bola.y + tamanho_bola >= tamanho_tela[1]:
+       vidas - 1
+       if vidas == 0:
+           movimento = None
+       return vidas
 
 def atualizar_pontuacao(pontuacao):
     fonte = pygame.font.Font(None, 30)
@@ -140,7 +153,7 @@ coracoes = criar_coracao(qtde_coracao_total)
 while not fim_jogo:
     desenhar_inicio_jogo()
     desenhar_blocos(blocos)
-    desenhar_coracoes(coracoes)
+    # desenhar_coracoes(coracoes)
     atualizar_vidas(qtde_coracao_total)
     fim_jogo = atualizar_pontuacao(qtde_total_blocos - len(blocos))
     for evento in pygame.event.get():
